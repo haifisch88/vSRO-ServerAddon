@@ -84,7 +84,7 @@ void AppManager::InitConfigFile()
 		ini.SetLongValue("Event", "CTF_ITEM_WIN_REWARD_AMOUNT", 1, "; Amount to obtain by winning");
 		ini.SetValue("Event", "CTF_ITEM_KILL_REWARD", "ITEM_ETC_E080723_ICETROPHY", "; Item reward from killing at Capture The Flag");
 		ini.SetLongValue("Event", "CTF_ITEM_KILL_REWARD_AMOUNT", 1, "; Amount to obtain by kill");
-		ini.SetValue("Event","BA_ITEM_REWARD","ITEM_ETC_ARENA_COIN","; Item reward from Battle Arena");
+		ini.SetValue("Event", "BA_ITEM_REWARD", "ITEM_ETC_ARENA_COIN", "; Item reward from Battle Arena");
 		ini.SetLongValue("Event", "BA_ITEM_REWARD_GJ_W_AMOUNT", 7, "; Amount to obtain winning on Guild/Job mode");
 		ini.SetLongValue("Event", "BA_ITEM_REWARD_GJ_L_AMOUNT", 2, "; Amount to obtain loosing");
 		ini.SetLongValue("Event", "BA_ITEM_REWARD_PR_W_AMOUNT", 5, "; Amount to obtain winning on Party/Random mode");
@@ -127,7 +127,7 @@ void AppManager::InitHooks()
 	ini.LoadFile("vSRO-GameServer.ini");
 
 	// Fixes
-	if (ini.GetBoolValue("Fix","UNIQUE_LOGS",true))
+	if (ini.GetBoolValue("Fix", "UNIQUE_LOGS", true))
 	{
 		// Create connection string
 		std::wstringstream connString;
@@ -234,13 +234,13 @@ void AppManager::InitPatchValues()
 			WriteMemoryValue<uint32_t>(0x004F7746 + 4, newValue);
 		}
 	}
-	if(ReadMemoryValue<uint8_t>(0x00513FEC + 1, byteValue))
+	if (ReadMemoryValue<uint8_t>(0x00513FEC + 1, byteValue))
 	{
 		uint8_t newValue = ini.GetLongValue("Server", "PARTY_LEVEL_MIN", 5);
 		printf(" - SERVER_PARTY_LEVEL_MIN (%d) -> (%d)\r\n", byteValue, newValue);
 		WriteMemoryValue<uint8_t>(0x00513FEC + 1, newValue);
 	}
-	if(ReadMemoryValue<uint8_t>(0x00558F20 + 4, byteValue))
+	if (ReadMemoryValue<uint8_t>(0x00558F20 + 4, byteValue))
 	{
 		uint8_t newValue = ini.GetLongValue("Server", "PARTY_MOB_MEMBERS_REQUIRED", 2);
 		printf(" - SERVER_PARTY_MOB_MEMBERS_REQUIRED (%d) -> (%d)\r\n", byteValue, newValue);
@@ -252,7 +252,7 @@ void AppManager::InitPatchValues()
 		printf(" - SERVER_PARTY_MOB_SPAWN_PROBABILITY (%d) -> (%d)\r\n", byteValue, newValue);
 		WriteMemoryValue<uint8_t>(0x005608E2 + 2, newValue);
 	}
-	if(ReadMemoryValue<uint8_t>(0x005295DA + 1, byteValue))
+	if (ReadMemoryValue<uint8_t>(0x005295DA + 1, byteValue))
 	{
 		uint8_t newValue = ini.GetLongValue("Server", "PK_LEVEL_REQUIRED", 20);
 		printf(" - SERVER_PK_LEVEL_REQUIRED (%d) -> (%d)\r\n", byteValue, newValue);
@@ -368,9 +368,9 @@ void AppManager::InitPatchValues()
 		if (ReadMemoryValue<uint32_t>(0x00C6B5F8 + 4, increaseValue))
 		{
 			uint32_t increaseNewValue = ini.GetLongValue("Guild", "STORAGE_SLOTS_INCREASE", 30);
-			printf(" - GUILD_STORAGE_SLOTS_INCREASE (%d) -> (%d)\r\n", increaseValue-uintValue, increaseNewValue);
-			for(int i = 0; i < 3; i++)
-				WriteMemoryValue<uint32_t>(0x00C6B5F8 + 4 + (i*4), newValue + (i+1)*increaseNewValue);
+			printf(" - GUILD_STORAGE_SLOTS_INCREASE (%d) -> (%d)\r\n", increaseValue - uintValue, increaseNewValue);
+			for (int i = 0; i < 3; i++)
+				WriteMemoryValue<uint32_t>(0x00C6B5F8 + 4 + (i * 4), newValue + (i + 1) * increaseNewValue);
 		}
 	}
 	if (ReadMemoryValue<uint8_t>(0x005B8EA1 + 1, byteValue))
@@ -513,9 +513,9 @@ void AppManager::InitPatchValues()
 	if (ini.GetBoolValue("Fix", "DISABLE_GREEN_BOOK", true))
 	{
 		printf(" - FIX_DISABLE_GREEN_BOOK\r\n");
-		for(int i = 0; i < 8; i++)
+		for (int i = 0; i < 8; i++)
 			WriteMemoryValue<uint8_t>(0x004142E2 + i, 0x90); // NOP
-		for(int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++)
 			WriteMemoryValue<uint8_t>(0x0041474D + i, 0x90); // NOP
 	}
 	if (ini.GetBoolValue("Fix", "DISABLE_MSGBOX_SILK_GOLD_PRICE", true))
@@ -527,7 +527,7 @@ void AppManager::InitPatchValues()
 	if (ini.GetBoolValue("Fix", "EXCHANGE_ATTACK_CANCEL", true))
 	{
 		printf(" - FIX_EXCHANGE_ATTACK_CANCEL\r\n");
-		for(int i = 0; i < 2; i++)
+		for (int i = 0; i < 2; i++)
 			WriteMemoryValue<uint8_t>(0x00515578 + i, 0x90); // NOP call
 	}
 	if (ini.GetBoolValue("Fix", "EXPLOIT_INVISIBLE_INVINCIBLE", true))
@@ -568,9 +568,9 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 
 	// Generate unique id to fetch from multiples instances
 	int pId = GetProcessInstanceId();
-	std::string suffix = (pId == 0 ? "" : std::to_string(pId + 1));
+	std::string suffix = std::to_string(pId + 1);
 	const char* fetchTableSuffix = suffix.c_str();
-	
+
 	// Show a message about table to be fetch
 	std::cout << " - Waiting 1min before start fetching on \"" << fetchTableName << fetchTableSuffix << "\"..." << std::endl;
 	Sleep(60000);
@@ -606,7 +606,7 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 	// Stops this thread loop on interruption/exit
 	signal(SIGINT, [](int) {
 		m_IsRunningDatabaseFetch = false;
-	});
+		});
 
 	// Start fetching actions without result
 	std::wstringstream qSelectActions;
@@ -624,7 +624,7 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 		{
 			// Set default state
 			FETCH_ACTION_STATE actionResult = FETCH_ACTION_STATE::SUCCESS;
-			
+
 			// Read required params
 			SQLINTEGER cID, cActionID;
 			char cCharName[64];
@@ -653,11 +653,11 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 						if (player)
 						{
 							auto operationCode = player->AddItem(cParam01, cParam02, cParam03, cParam04);
-							if(operationCode != 1)
+							if (operationCode != 1)
 							{
 								std::cout << " > Unnexpected AddItem on [" << cCharName << "] Result [" << operationCode << "]" << std::endl;
 								actionResult = FETCH_ACTION_STATE::FUNCTION_ERROR;
-							}						
+							}
 						}
 						else
 							actionResult = FETCH_ACTION_STATE::CHARNAME_NOT_FOUND;
@@ -711,7 +711,7 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 						CGObjPC* player = CGObjManager::GetObjPCByCharName16(cCharName);
 						if (player)
 						{
-							if(!player->MoveTo(cParam02, cParam03, cParam04, cParam05))
+							if (!player->MoveTo(cParam02, cParam03, cParam04, cParam05))
 								actionResult = FETCH_ACTION_STATE::FUNCTION_ERROR;
 						}
 						else
@@ -725,7 +725,7 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 					// Read & check params
 					SQLUSMALLINT cParam02, cParam03, cParam04, cParam06;
 					SQLSMALLINT cParam05;
-					if ( m_dbLink.sqlCmd.GetData(5, SQL_C_USHORT, &cParam02, 0, NULL)
+					if (m_dbLink.sqlCmd.GetData(5, SQL_C_USHORT, &cParam02, 0, NULL)
 						&& m_dbLink.sqlCmd.GetData(6, SQL_C_USHORT, &cParam03, 0, NULL)
 						&& m_dbLink.sqlCmd.GetData(7, SQL_C_USHORT, &cParam04, 0, NULL)
 						&& m_dbLink.sqlCmd.GetData(8, SQL_C_SHORT, &cParam05, 0, NULL)
@@ -735,14 +735,14 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 						CGObjPC* player = CGObjManager::GetObjPCByCharName16(cCharName);
 						if (player)
 						{
-							if(!player->MoveTo(cParam02 + 0x10000, cParam03, cParam04, cParam05, cParam06))
+							if (!player->MoveTo(cParam02 + 0x10000, cParam03, cParam04, cParam05, cParam06))
 								actionResult = FETCH_ACTION_STATE::FUNCTION_ERROR;
 						}
 						else
 							actionResult = FETCH_ACTION_STATE::CHARNAME_NOT_FOUND;
 					}
 					else
-						actionResult = FETCH_ACTION_STATE::PARAMS_NOT_SUPPLIED;				
+						actionResult = FETCH_ACTION_STATE::PARAMS_NOT_SUPPLIED;
 				} break;
 				case 6: // Drop item near player
 				{
@@ -765,7 +765,7 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 						actionResult = FETCH_ACTION_STATE::PARAMS_NOT_SUPPLIED;
 				} break;
 				case 7: // Transform item from inventory slot
-				{ 
+				{
 					// Read & check params
 					char cParam01[128];
 					SQLUSMALLINT cParam02;
@@ -786,12 +786,12 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 						actionResult = FETCH_ACTION_STATE::PARAMS_NOT_SUPPLIED;
 				} break;
 				case 8: // Force reloading player
-				{ 
+				{
 					// Check player existence
 					CGObjPC* player = CGObjManager::GetObjPCByCharName16(cCharName);
 					if (player)
 					{
-						if(!player->Reload())
+						if (!player->Reload())
 							actionResult = FETCH_ACTION_STATE::FUNCTION_ERROR;
 					}
 					else
@@ -999,24 +999,24 @@ DWORD WINAPI AppManager::DatabaseFetchThread()
 
 int AppManager::GetProcessInstanceId()
 {
-    // Check unique process instances using the executable path
-    std::string path = GetExecutablePath();
-    StringReplaceAll(path, "\\", "/"); // Replace special symbols used on mutex
+	// Check unique process instances using the executable path
+	std::string path = GetExecutablePath();
+	StringReplaceAll(path, "\\", "/"); // Replace special symbols used on mutex
 
-    // Find available id
-    int id = 0;
-    while (true)
-    {
-        // Set an unique name as ID
-        std::stringstream ss;
-        ss << "Global\\" << path.c_str() << "|" << id;
+	// Find available id
+	int id = 0;
+	while (true)
+	{
+		// Set an unique name as ID
+		std::stringstream ss;
+		ss << "Global\\" << "|" << id;
 
-        // Try to create mutex
-        CreateMutexA(NULL, TRUE, ss.str().c_str());
-        if (GetLastError() != ERROR_ALREADY_EXISTS)
-            break;
-        // Try to find another id
-        id++;
-    }
-    return id;
+		// Try to create mutex
+		CreateMutexA(NULL, TRUE, ss.str().c_str());
+		if (GetLastError() != ERROR_ALREADY_EXISTS)
+			break;
+		// Try to find another id
+		id++;
+	}
+	return id;
 }

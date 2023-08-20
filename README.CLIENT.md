@@ -28,6 +28,8 @@ This is a compilations of ASM/editions for vSRO (1.188) that you'll need to chan
 0073FAAF | 6A 6E                    | push 6E                           | Party Match
 
 0073FACC | 6A 6E                    | push 6E                           | Party Match
+
+00955134 | 8078 20 6E               | CMP BYTE PTR DS:[EAX+20],6E       | Quest limit
 ```
 
 ### SERVER_STALL_PRICE_LIMIT
